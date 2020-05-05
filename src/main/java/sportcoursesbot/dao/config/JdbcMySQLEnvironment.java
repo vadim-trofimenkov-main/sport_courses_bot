@@ -12,9 +12,6 @@ class JdbcMySQLEnvironment extends Environment {
         super(initImmediate);
     }
 
-    JdbcMySQLEnvironment() {
-        super();
-    }
 
 
 

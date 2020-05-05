@@ -24,9 +24,6 @@ abstract class Environment {
         }
     }
 
-    Environment() {
-    }
-
     abstract void init();
 }
 
