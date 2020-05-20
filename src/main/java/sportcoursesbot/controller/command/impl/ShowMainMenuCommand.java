@@ -36,9 +36,10 @@ public class ShowMainMenuCommand implements Command {
         User user = session.getUser();
         Role role = user.getRole();
         if (Role.ADMIN.equals(role)) {
-            keyboard.add(Arrays.asList(new InlineKeyboardButton(MANAGE_USERS).setCallbackData(CommandNames.SHOW_USERS_FOR_ADMIN)));
+            List<InlineKeyboardButton> buttons3 = Arrays.asList(
+                    new InlineKeyboardButton(MANAGE_USERS).setCallbackData(CommandNames.SHOW_USERS_FOR_ADMIN));
+            keyboard.add(buttons3);
         }
-
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
 

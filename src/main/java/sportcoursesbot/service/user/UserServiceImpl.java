@@ -3,6 +3,7 @@ package sportcoursesbot.service.user;
 
 
 import sportcoursesbot.dao.DaoFactory;
+import sportcoursesbot.dao.config.ConnectionManager;
 import sportcoursesbot.dao.user.UserDao;
 import sportcoursesbot.shared.entity.User;
 import sportcoursesbot.shared.entity.security.Feature;

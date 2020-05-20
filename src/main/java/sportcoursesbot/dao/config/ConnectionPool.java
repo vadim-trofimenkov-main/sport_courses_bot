@@ -85,7 +85,7 @@ public class ConnectionPool {
                 connection.setAutoCommit(true);
             }
             synchronized (given) {
-                if (!given.remove(this)) {
+                if (given.remove(this)) {
                     throw new SQLException("Error deleting connection from the given " +
                             "away connection pool");
                 }
