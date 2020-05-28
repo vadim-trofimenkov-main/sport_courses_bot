@@ -34,7 +34,8 @@ public class ShowMainMenuCommand implements Command {
         Long chatId = ChatUtil.readChatId(update);
         UserSession session = SessionManager.getSession(chatId);
         User user = session.getUser();
-        Role role = user.getRole();
+        String status = user.getStatus();
+        Role role = Role.getByName(status);
         if (Role.ADMIN.equals(role)) {
             List<InlineKeyboardButton> buttons3 = Arrays.asList(
                     new InlineKeyboardButton(MANAGE_USERS).setCallbackData(CommandNames.SHOW_USERS_FOR_ADMIN));
