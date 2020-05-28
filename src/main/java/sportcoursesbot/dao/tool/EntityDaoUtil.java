@@ -51,17 +51,17 @@ public class EntityDaoUtil {
 
 
     public static Course initCourse(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("Id");
+        int id = resultSet.getInt("id");
         String title = resultSet.getString("title");
         Timestamp startDate = resultSet.getTimestamp("start_date");
         String description = resultSet.getString("description");
-        int lectureId = resultSet.getInt("lecture_id");
+        int coachId = resultSet.getInt("coaches_id");
         Course course = new Course();
         course.setId(id);
         course.setTitle(title);
         course.setStartDate(startDate);
         course.setDescription(description);
-        course.setLectureId(lectureId);
+        course.setCoachesId(coachId);
         return course;
     }
 }

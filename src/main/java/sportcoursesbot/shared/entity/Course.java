@@ -15,5 +15,5 @@ public class Course extends DaoEntity {
     private String title;
     private String description;
     private Timestamp startDate;
-    private Integer lectureId;
+    private Integer coachesId;
 }
