@@ -1,6 +1,5 @@
 package sportcoursesbot.dao.user;
 
-import lombok.SneakyThrows;
 import sportcoursesbot.dao.config.ConnectionManager;
 import sportcoursesbot.dao.tool.EntityDaoUtil;
 import sportcoursesbot.shared.entity.User;
@@ -11,13 +10,12 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private final static String SELECT_USER_BY_CHAT_ID = "SELECT * FROM users WHERE chat_id = ?;";
-    private final static String CREATE_USER = "INSERT INTO users(chat_id, username, status) VALUES( ?, ?, ?);";
+    private final static String CREATE_USER = "INSERT INTO users (chat_id, username, status) VALUES(?, ?, ?)";
     private final static String SELECT_ALL_USERS = "SELECT * FROM users";
 
-    @SneakyThrows
     @Override
-    public User getUSer(Long chatId) {
-        Connection connection;
+    public User getUser(Long chatId) {
+        Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = ConnectionManager.take();
@@ -32,12 +30,11 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            ConnectionManager.close(statement);
+            ConnectionManager.close(statement, connection);
         }
         return null;
     }
 
-    @SneakyThrows
     @Override
     public void createUser(User user) {
         Connection connection = null;
@@ -59,7 +56,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    @SneakyThrows
     @Override
     public List<User> getAllUsers() {
         Connection connection = null;

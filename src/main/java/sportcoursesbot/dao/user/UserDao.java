@@ -6,7 +6,7 @@ import sportcoursesbot.shared.entity.User;
 import java.util.List;
 
 public interface UserDao {
-    User getUSer(Long chatId);
+    User getUser(Long chatId);
 
     void createUser(User user);
 

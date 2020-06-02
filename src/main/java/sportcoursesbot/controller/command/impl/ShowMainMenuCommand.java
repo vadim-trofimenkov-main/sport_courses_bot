@@ -7,11 +7,12 @@ import sportcoursesbot.controller.SportCoursesBot;
 import sportcoursesbot.controller.base.SessionManager;
 import sportcoursesbot.controller.base.UserSession;
 import sportcoursesbot.controller.command.Command;
-import sportcoursesbot.controller.command.tool.ChatUtil;
+import sportcoursesbot.controller.tool.chat.ChatUtil;
 import sportcoursesbot.controller.constant.CommandNames;
 import sportcoursesbot.shared.entity.User;
 import sportcoursesbot.shared.entity.security.Role;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +30,9 @@ public class ShowMainMenuCommand implements Command {
         List<InlineKeyboardButton> buttons2 = Arrays.asList(
                 new InlineKeyboardButton(ALL_COURSES).setCallbackData(CommandNames.SHOW_ALL_COURSES)
         );
-        List<List<InlineKeyboardButton>> keyboard = Arrays.asList(buttons1, buttons2);
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(buttons1);
+        keyboard.add(buttons2);
 
         Long chatId = ChatUtil.readChatId(update);
         UserSession session = SessionManager.getSession(chatId);

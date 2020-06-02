@@ -1,6 +1,6 @@
 package sportcoursesbot.shared.entity;
 
-public class DaoEntity{
+public class DaoEntity {
     private Integer id;
 
     public Integer getId() {
@@ -8,8 +8,8 @@ public class DaoEntity{
     }
 
     public void setId(Integer id) {
-        if( this.id != null){
-           throw new RuntimeException("id is already set");
+        if (this.id != null) {
+            throw new RuntimeException("id is already set");
         }
         this.id = id;
     }

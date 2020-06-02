@@ -1,10 +1,9 @@
 package sportcoursesbot.dao.course;
 
-
-import lombok.SneakyThrows;
 import sportcoursesbot.dao.config.ConnectionManager;
 import sportcoursesbot.dao.tool.EntityDaoUtil;
 import sportcoursesbot.shared.entity.Course;
+import sportcoursesbot.shared.exception.UserFriendlyException;
 
 import java.sql.*;
 import java.util.List;
@@ -13,7 +12,6 @@ public class CourseDaoImpl implements CourseDao {
     private static final String SELECT_ALL_COURSES = "SELECT id, title, start_date FROM courses";
     private static final String SELECT_FULL_COURSE = "SELECT * FROM courses WHERE id = ?";
 
-    @SneakyThrows
     @Override
     public List<Course> getAllCoursesShort() {
         List<Course> courses;
@@ -27,13 +25,12 @@ public class CourseDaoImpl implements CourseDao {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }finally {
-            ConnectionManager.close(statement,connection);
+        } finally {
+            ConnectionManager.close(statement, connection);
         }
         return courses;
     }
 
-    @SneakyThrows
     @Override
     public Course getFullCourse(int id) {
         Course course;
@@ -44,13 +41,16 @@ public class CourseDaoImpl implements CourseDao {
             statement = connection.prepareStatement(SELECT_FULL_COURSE);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            course = EntityDaoUtil.initCourse(resultSet);
+            if (resultSet.next()) {
+                course = EntityDaoUtil.initCourse(resultSet);
+            } else {
+                throw new UserFriendlyException("Course does not exist");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
-        }finally {
-            ConnectionManager.close(statement,connection);
+        } finally {
+            ConnectionManager.close(statement, connection);
         }
         return course;
     }

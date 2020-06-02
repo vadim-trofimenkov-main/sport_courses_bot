@@ -9,64 +9,57 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
-public class ConnectionPool {
-    private Environment environment;
-    private Set<Connection> given;
+class ConnectionPool {
     private BlockingQueue<Connection> available;
+    private Set<Connection> given;
+    private Environment environment;
 
     ConnectionPool(Environment environment) {
         this.environment = environment;
-        System.out.println(environment);
-        try {
-            init();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        initPoolData();
     }
 
-    private void init() throws SQLException {
+    private void initPoolData() {
         int poolSize = environment.getPoolSize();
-        given = new HashSet<>(poolSize);
-        available = new ArrayBlockingQueue<>(poolSize);
-        String driver = environment.getDriver();
-        try {
-            Class.forName(driver);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        String url = environment.getUrl();
-        String username = environment.getUsername();
-        String password = environment.getPassword();
+
         Connection connection;
-        for (int i = 0; i < poolSize; i++) {
-            connection = DriverManager.getConnection(url, username, password);
-            available.add(new PooledConnection(connection));
+        try {
+            Class.forName(environment.getDriver());
+            given = new HashSet<>(poolSize);
+            available = new ArrayBlockingQueue<>(poolSize);
+            for (int i = 0; i < poolSize; i++) {
+                connection = DriverManager.getConnection(environment.getUrl(), environment.getUsername(), environment.password);
+                PooledConnection pooledConnection = new PooledConnection(connection);
+                available.add(pooledConnection);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Exception in connection pool", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Can't load driver", e);
         }
-        System.out.println("Connection pool is initialized");
     }
 
-    public Connection take() {
+    public Connection takeConnection() {
+        Connection connection;
         try {
             synchronized (available) {
-                Connection connection = available.take();
+                connection = available.take();
                 synchronized (given) {
+                    given.add(connection);
                 }
-                return connection;
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error connecting to the data source", e);
         }
+        return connection;
     }
 
-
-   private class PooledConnection implements Connection {
+    private class PooledConnection implements Connection {
         private Connection connection;
 
         public PooledConnection(Connection connection) throws SQLException {
-            connection.setAutoCommit(true);
             this.connection = connection;
+            this.connection.setAutoCommit(true);
         }
 
         public void reallyClose() throws SQLException {
@@ -78,22 +71,22 @@ public class ConnectionPool {
             if (connection.isClosed()) {
                 throw new SQLException("Attempting to close closed connection");
             }
+
             if (connection.isReadOnly()) {
                 connection.setReadOnly(false);
             }
-            if (connection.getAutoCommit()) {
+
+            if (!connection.getAutoCommit()) {
                 connection.setAutoCommit(true);
             }
-            synchronized (given) {
-                if (given.remove(this)) {
-                    throw new SQLException("Error deleting connection from the given " +
-                            "away connection pool");
-                }
+
+            if (!given.remove(this)) {
+                throw new SQLException("Error deleting connection from the given " +
+                        "away connection pool");
             }
-            synchronized (available) {
-                if (!available.offer(this)) {
-                    throw new SQLException("Error allocating connection in the pool");
-                }
+
+            if (!available.offer(this)) {
+                throw new SQLException("Error allocating connection in the pool");
             }
         }
 
@@ -128,18 +121,18 @@ public class ConnectionPool {
         }
 
         @Override
-        public void commit() {
-
+        public void commit() throws SQLException {
+            connection.commit();
         }
 
         @Override
-        public void rollback() {
-
+        public void rollback() throws SQLException {
+            connection.rollback();
         }
 
         @Override
-        public boolean isClosed() {
-            return false;
+        public boolean isClosed() throws SQLException {
+            return connection.isClosed();
         }
 
         @Override
@@ -364,5 +357,3 @@ public class ConnectionPool {
     }
 
 }
-
-

@@ -8,4 +8,6 @@ public interface CommandNames {
     String SHOW_FULL_COURSE = "/show_full_course";
     String SHOW_MY_COURSES = "/show_my_courses";
     String SHOW_USERS_FOR_ADMIN = "/show_users_for_admin";
+    String INITIALIZE_USER_SESSION = "/init_user_session";
+    String REFRESH_USER_STATUS = "/refresh_user_status";
 }

@@ -6,6 +6,7 @@ import sportcoursesbot.dao.course.CourseDao;
 import sportcoursesbot.shared.entity.Course;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CourseServiceImpl implements CourseService {
     private CourseDao courseDao = DaoFactory.getCourseDao();
@@ -13,25 +14,16 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getAllActualCourses() {
         List<Course> allCourses = courseDao.getAllCoursesShort();
-        List<Course> actualCourses = new ArrayList<>();
-        Date date = new Date();
-        for (Course course : allCourses) {
-            if (course.getStartDate().after(date)) {
-                actualCourses.add(course);
-            }
-        }
-        Comparator<Course> comparator = new Comparator<Course>() {
-            @Override
-            public int compare(Course o1, Course o2) {
-            return o1.getStartDate().compareTo(o2.getStartDate());
-            }
-        };
-        comparator.thenComparing(new Comparator<Course>() {
-            @Override
-            public int compare(Course o1, Course o2) {
-                return o1.getTitle().compareTo(o2.getTitle());
-            }
-        });
+        final Date curDate = new Date();
+
+        List<Course> actualCourses = allCourses.stream()
+                .filter(n -> n.getStartDate().after(curDate))
+                .collect(Collectors.toList());
+
+        Comparator<Course> comparator = Comparator.comparing(Course::getStartDate);
+
+        comparator.thenComparing(Course::getTitle);
+
         Collections.sort(actualCourses, comparator);
         return actualCourses;
     }
@@ -40,4 +32,5 @@ public class CourseServiceImpl implements CourseService {
     public Course getFullCourse(int id) {
         return courseDao.getFullCourse(id);
     }
+
 }

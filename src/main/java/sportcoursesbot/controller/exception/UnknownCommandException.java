@@ -1,4 +1,4 @@
-package sportcoursesbot.controller.command.exception;
+package sportcoursesbot.controller.exception;
 
 import sportcoursesbot.shared.exception.UserFriendlyException;
 

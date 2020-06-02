@@ -6,8 +6,8 @@ import sportcoursesbot.controller.SportCoursesBot;
 import sportcoursesbot.controller.base.SessionManager;
 import sportcoursesbot.controller.base.UserSession;
 import sportcoursesbot.controller.command.Command;
-import sportcoursesbot.controller.command.tool.ChatUtil;
-import sportcoursesbot.controller.command.tool.UiEntityUtil;
+import sportcoursesbot.controller.tool.chat.ChatUtil;
+import sportcoursesbot.controller.tool.UiEntityUtil;
 import sportcoursesbot.service.ServiceFactory;
 import sportcoursesbot.service.user.UserService;
 import sportcoursesbot.shared.entity.User;
@@ -24,7 +24,7 @@ public class ShowUsersForAdmin implements Command {
         List<User> allUsers = service.getAllUsers(chatId);
 
         session.setAllUsers(allUsers);
-        String userToString = UiEntityUtil.userToString(allUsers);
-        ChatUtil.sendMessage(userToString, update, source);
+        String usersToString = UiEntityUtil.usersToString(allUsers);
+        ChatUtil.sendMessage(usersToString, update, source);
     }
 }

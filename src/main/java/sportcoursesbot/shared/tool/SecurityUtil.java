@@ -8,7 +8,6 @@ import sportcoursesbot.shared.entity.security.Role;
 import java.util.List;
 
 public class SecurityUtil {
-
     public static boolean hasFeature(User user, Feature feature) {
         Role role = user.getRole();
         if (role.equals(Role.SUPER_ADMIN)) {

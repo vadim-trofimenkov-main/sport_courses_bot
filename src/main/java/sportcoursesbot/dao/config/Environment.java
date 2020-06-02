@@ -1,29 +1,66 @@
 package sportcoursesbot.dao.config;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.Objects;
 
-
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString(exclude = "password")
-
-abstract class Environment {
+public abstract class Environment {
     protected String url;
     protected String username;
     protected String password;
     protected String driver;
-    protected Integer poolSize;
+    protected int poolSize;
 
-    Environment(boolean initImmediate) {
+    protected Environment(boolean initImmediate) {
         if (initImmediate) {
             init();
         }
     }
 
     abstract void init();
-}
 
+    public String getUrl() {
+        return url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public int getPoolSize() {
+        return poolSize;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Environment that = (Environment) o;
+        return Objects.equals(url, that.url) &&
+                Objects.equals(username, that.username) &&
+                Objects.equals(password, that.password) &&
+                Objects.equals(driver, that.driver) &&
+                Objects.equals(poolSize, that.poolSize);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url, username, password, driver, poolSize);
+    }
+
+    @Override
+    public String toString() {
+        return "Environment{" +
+                "url='" + url + '\'' +
+                ", username='" + username + '\'' +
+                ", driver='" + driver + '\'' +
+                ", poolSize=" + poolSize +
+                '}';
+    }
+}

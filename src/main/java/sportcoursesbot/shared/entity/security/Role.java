@@ -5,7 +5,7 @@ import java.util.*;
 public enum Role {
     ADMIN(2, Arrays.asList(Feature.BLOCK_SIMPLE_USER, Feature.EDIT_SIMPLE_USER, Feature.VIEW_USERS)),
     SIMPLE_USER(1, new ArrayList<>()),
-    SUPER_ADMIN(999, new ArrayList<>()),
+    SUPER_ADMIN(9999, Arrays.asList(Feature.values())),
     BLOCKED(-1, new ArrayList<>());
 
     private Integer compare;
@@ -36,4 +36,5 @@ public enum Role {
         ROLE_NAMES.put("super_admin", SUPER_ADMIN);
         ROLE_NAMES.put("blocked", BLOCKED);
     }
+
 }

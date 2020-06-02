@@ -2,12 +2,14 @@ package sportcoursesbot.shared.entity;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import sportcoursesbot.shared.entity.security.Role;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class User {
+public class User extends DaoEntity {
     private Long chatId;
     private String username;
     private String status;

@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import sportcoursesbot.controller.base.SessionManager;
 import sportcoursesbot.controller.base.UserSession;
 import sportcoursesbot.controller.command.Command;
-import sportcoursesbot.controller.command.exception.UnknownCommandException;
+import sportcoursesbot.controller.exception.UnknownCommandException;
 import sportcoursesbot.controller.command.impl.*;
 import sportcoursesbot.controller.constant.CommandNames;
 
@@ -23,6 +23,8 @@ public class TaskManager {
         COMMANDS.put(CommandNames.SHOW_ALL_COURSES, new ShowAllCourses());
         COMMANDS.put(CommandNames.SHOW_FULL_COURSE, new ShowFullCourse());
         COMMANDS.put(CommandNames.SHOW_USERS_FOR_ADMIN, new ShowUsersForAdmin());
+        COMMANDS.put(CommandNames.INITIALIZE_USER_SESSION, new InitSessionCommand());
+        COMMANDS.put(CommandNames.REFRESH_USER_STATUS, new RefreshUserStatus());
     }
 
     public void impl(String commandName, Update update, SportCoursesBot source) throws TelegramApiException {
@@ -45,5 +47,10 @@ public class TaskManager {
 
     public static Command getCommand(String name) {
         return COMMANDS.get(name);
+    }
+
+    public static void executeByName(String name, SportCoursesBot source, Update update) throws TelegramApiException {
+        Command command = COMMANDS.get(name);
+        command.execute(source, update);
     }
 }
