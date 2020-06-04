@@ -26,6 +26,6 @@ public class ShowAllCourses implements Command {
                 Course::getId, UiEntityUtil::courseToShortString);
 
         InlineKeyboardMarkup markup = KeyboardUtil.buildMarkup(configs);
-        ChatUtil.sendMessageWithMarkup("Here is all our actual courses", update, source, markup);
+        ChatUtil.sendMessageWithMarkup("All actual courses:", update, source, markup);
     }
 }

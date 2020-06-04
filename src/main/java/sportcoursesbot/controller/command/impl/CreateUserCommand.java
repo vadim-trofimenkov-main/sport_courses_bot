@@ -28,7 +28,7 @@ public class CreateUserCommand implements Command {
         } else {
             SessionManager.putSession(chatId, newUser);
         }
-        ChatUtil.sendMessage("Welcome", chatId, source);
+        ChatUtil.sendMessage("Nice to meet you!", chatId, source);
         Command showMenu = TaskManager.getCommand(CommandNames.SHOW_MAIN_MENU);
         showMenu.execute(source, update);
     }

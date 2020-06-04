@@ -47,7 +47,7 @@ public class ShowMainMenuCommand implements Command {
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
 
-        String message = "Hi, " + user.getUsername();
+        String message = "Hello, " + user.getUsername();
         ChatUtil.sendMessageWithMarkup(message, update, source, markup);
     }
 }

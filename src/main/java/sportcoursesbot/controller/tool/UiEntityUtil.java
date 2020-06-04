@@ -30,7 +30,9 @@ public class UiEntityUtil {
         String formatDate = dateFormat.format(date);
 
         builder.append(course.getTitle())
-                .append("\tStart: ")
+                .append("\n")
+                .append("\t")
+                .append("Start: ")
                 .append(formatDate);
         return builder.toString();
     }
