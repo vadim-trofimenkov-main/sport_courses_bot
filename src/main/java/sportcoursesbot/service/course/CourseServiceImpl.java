@@ -28,6 +28,7 @@ public class CourseServiceImpl implements CourseService {
         return actualCourses;
     }
 
+
     @Override
     public Course getFullCourse(int id) {
         return courseDao.getFullCourse(id);

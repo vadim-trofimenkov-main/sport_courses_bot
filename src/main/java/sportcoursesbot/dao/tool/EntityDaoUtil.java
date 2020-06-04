@@ -1,6 +1,7 @@
 package sportcoursesbot.dao.tool;
 
 
+import sportcoursesbot.shared.entity.Coach;
 import sportcoursesbot.shared.entity.Course;
 import sportcoursesbot.shared.entity.User;
 
@@ -73,4 +74,26 @@ public class EntityDaoUtil {
         course.setCoachesId(coachesId);
         return course;
     }
+
+     public static Coach initCoach (ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        String name = resultSet.getString("name");
+        String specialization = resultSet.getString("specialization");
+        int experience = resultSet.getInt("experience");
+        Coach coach = new Coach();
+        coach.setId(id);
+        coach.setName(name);
+        coach.setSpecialization(specialization);
+        coach.setExperience(experience);
+        return coach;
+     }
+     public static List<Coach> initCoaches(ResultSet resultSet) throws SQLException{
+        List<Coach> coaches = new ArrayList<>();
+        resultSet.beforeFirst();
+        while(resultSet.next()){
+            Coach coach = initCoach(resultSet);
+            coaches.add(coach);
+        }
+        return coaches;
+     }
 }

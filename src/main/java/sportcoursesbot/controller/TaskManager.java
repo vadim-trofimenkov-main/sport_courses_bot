@@ -25,6 +25,7 @@ public class TaskManager {
         COMMANDS.put(CommandNames.SHOW_USERS_FOR_ADMIN, new ShowUsersForAdmin());
         COMMANDS.put(CommandNames.INITIALIZE_USER_SESSION, new InitSessionCommand());
         COMMANDS.put(CommandNames.REFRESH_USER_STATUS, new RefreshUserStatus());
+        COMMANDS.put(CommandNames.SHOW_ALL_COACHES, new ShowAllCoaches());
     }
 
     public void impl(String commandName, Update update, SportCoursesBot source) throws TelegramApiException {

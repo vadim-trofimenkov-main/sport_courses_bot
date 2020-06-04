@@ -1,6 +1,7 @@
 package sportcoursesbot.controller.tool;
 
 
+import sportcoursesbot.shared.entity.Coach;
 import sportcoursesbot.shared.entity.Course;
 import sportcoursesbot.shared.entity.User;
 
@@ -43,6 +44,18 @@ public class UiEntityUtil {
             builder.append(user.getUsername())
                     .append(" - ")
                     .append(user.getStatus())
+                    .append("\n");
+        }
+        return builder.toString();
+    }
+    public static String coachesToString(Collection<Coach> coaches){
+        StringBuilder builder = new StringBuilder();
+        for (Coach coach : coaches) {
+            builder.append("Coach: " + coach.getName())
+                    .append(" - ")
+                    .append("Specialization: " + coach.getSpecialization())
+                    .append(", ")
+                    .append("Experience: " + coach.getExperience())
                     .append("\n");
         }
         return builder.toString();

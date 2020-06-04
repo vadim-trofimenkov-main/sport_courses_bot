@@ -20,6 +20,7 @@ public class ShowMainMenuCommand implements Command {
     private static final String ALL_COURSES = "All courses";
     private static final String MY_COURSES = "My courses";
     private static final String MANAGE_USERS = "Manage users";
+    private static final String ALL_COACHES = "Our Coaches";
 
     @Override
     public void execute(SportCoursesBot source, Update update) throws TelegramApiException {
@@ -30,9 +31,13 @@ public class ShowMainMenuCommand implements Command {
         List<InlineKeyboardButton> buttons2 = Arrays.asList(
                 new InlineKeyboardButton(ALL_COURSES).setCallbackData(CommandNames.SHOW_ALL_COURSES)
         );
+        List<InlineKeyboardButton> buttons3 = Arrays.asList(
+                new InlineKeyboardButton(ALL_COACHES).setCallbackData(CommandNames.SHOW_ALL_COACHES)
+        );
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         keyboard.add(buttons1);
         keyboard.add(buttons2);
+        keyboard.add(buttons3);
 
         Long chatId = ChatUtil.readChatId(update);
         UserSession session = SessionManager.getSession(chatId);
@@ -40,9 +45,9 @@ public class ShowMainMenuCommand implements Command {
         String status = user.getStatus();
         Role role = Role.getByName(status);
         if (Role.ADMIN.equals(role)) {
-            List<InlineKeyboardButton> buttons3 = Arrays.asList(
+            List<InlineKeyboardButton> buttons10 = Arrays.asList(
                     new InlineKeyboardButton(MANAGE_USERS).setCallbackData(CommandNames.SHOW_USERS_FOR_ADMIN));
-            keyboard.add(buttons3);
+            keyboard.add(buttons10);
         }
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
