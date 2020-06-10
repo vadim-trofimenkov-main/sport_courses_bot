@@ -18,7 +18,7 @@ public class ShowAllCoaches implements Command {
     public void execute(SportCoursesBot source, Update update) throws TelegramApiException {
         List<Coach> allCoaches = coachService.getAllCoaches();
         String coaches = UiEntityUtil.coachesToString(allCoaches);
+        ChatUtil.sendMessage("All coaches:", update, source);
         ChatUtil.sendMessage(coaches,update,source);
-
     }
 }

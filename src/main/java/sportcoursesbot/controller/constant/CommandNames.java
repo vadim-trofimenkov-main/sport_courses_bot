@@ -11,4 +11,8 @@ public interface CommandNames {
     String SHOW_USERS_FOR_ADMIN = "/show_users_for_admin";
     String INITIALIZE_USER_SESSION = "/init_user_session";
     String REFRESH_USER_STATUS = "/refresh_user_status";
+    String CREATE_NEW_COURSE = "/create_new_course";
+    String NEW_COURSE = "/new_course";
+    String DELETE_COURSE = "/create_new_course";
+    String EDIT_COURSE = "/create_new_course";
 }

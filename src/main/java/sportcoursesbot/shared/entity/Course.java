@@ -16,4 +16,9 @@ public class Course extends DaoEntity {
     private String description;
     private Timestamp startDate;
     private Integer coachesId;
+
+    public Course(String title, String description) {
+        this.description = description;
+        this.title = title;
+    }
 }

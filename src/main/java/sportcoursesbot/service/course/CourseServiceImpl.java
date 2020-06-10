@@ -34,4 +34,9 @@ public class CourseServiceImpl implements CourseService {
         return courseDao.getFullCourse(id);
     }
 
+    @Override
+    public void createCourse(Course course) {
+        courseDao.createCourse(course);
+    }
+
 }

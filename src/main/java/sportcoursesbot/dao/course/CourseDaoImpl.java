@@ -11,6 +11,7 @@ import java.util.List;
 public class CourseDaoImpl implements CourseDao {
     private static final String SELECT_ALL_COURSES = "SELECT id, title, start_date FROM courses";
     private static final String SELECT_FULL_COURSE = "SELECT * FROM courses WHERE id = ?";
+    private static final String CREATE_NEW_COURSE = "INSERT INTO courses (title, description, start_date) VALUES(?, ?, ?)";
 
     @Override
     public List<Course> getAllCoursesShort() {
@@ -53,5 +54,24 @@ public class CourseDaoImpl implements CourseDao {
             ConnectionManager.close(statement, connection);
         }
         return course;
+    }
+
+    @Override
+    public void createCourse(Course course) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try{
+            connection= ConnectionManager.take();
+            statement = connection.prepareStatement(CREATE_NEW_COURSE);
+            statement.setString(1,course.getTitle());
+            statement.setString(2,course.getDescription());
+            statement.setTimestamp(3,course.getStartDate());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionManager.close(statement, connection);
+        }
     }
 }

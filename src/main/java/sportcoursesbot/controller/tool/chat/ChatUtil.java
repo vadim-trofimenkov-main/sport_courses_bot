@@ -1,10 +1,14 @@
 package sportcoursesbot.controller.tool.chat;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import sportcoursesbot.controller.SportCoursesBot;
+import sportcoursesbot.shared.exception.UserFriendlyException;
+
+import java.util.Scanner;
 
 public class ChatUtil {
     public static Long readChatId(Update update) {
@@ -18,6 +22,15 @@ public class ChatUtil {
             throw new RuntimeException();
         }
         return chatId;
+    }
+    public static String readChatText(Update update)  {
+        String chatText;
+        CallbackQuery callbackQuery = update.getCallbackQuery();
+        chatText = callbackQuery.getData();
+        if (chatText.isEmpty()) {
+            throw new UserFriendlyException("Нет текста");
+        }
+        return chatText;
     }
 
     public static void sendMessage(String text, Long chatId, SportCoursesBot source) throws TelegramApiException {

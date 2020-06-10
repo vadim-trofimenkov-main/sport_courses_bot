@@ -21,6 +21,7 @@ public class ShowMainMenuCommand implements Command {
     private static final String MY_COURSES = "My courses";
     private static final String MANAGE_USERS = "Manage users";
     private static final String ALL_COACHES = "Our Coaches";
+    private static final String CREATE_COURSE = "Create Course";
 
     @Override
     public void execute(SportCoursesBot source, Update update) throws TelegramApiException {
@@ -47,7 +48,10 @@ public class ShowMainMenuCommand implements Command {
         if (Role.ADMIN.equals(role)) {
             List<InlineKeyboardButton> buttons10 = Arrays.asList(
                     new InlineKeyboardButton(MANAGE_USERS).setCallbackData(CommandNames.SHOW_USERS_FOR_ADMIN));
+            List<InlineKeyboardButton> buttons11 = Arrays.asList(
+                    new InlineKeyboardButton(CREATE_COURSE).setCallbackData(CommandNames.CREATE_NEW_COURSE));
             keyboard.add(buttons10);
+            keyboard.add(buttons11);
         }
 
         InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
