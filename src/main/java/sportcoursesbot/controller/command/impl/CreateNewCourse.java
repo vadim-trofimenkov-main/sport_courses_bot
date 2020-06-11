@@ -16,7 +16,7 @@ import sportcoursesbot.shared.entity.Course;
 public class CreateNewCourse implements Command {
     public static final String ENTER_COURSE_TITLE = "Please enter course title";
     public static final String ENTER_COURSE_DESCRIPTION = "Please enter course description";
-    //    public static final String ENTER_COURSE_START_DATE = "Please enter course start date in YYYY-MM-DD format";
+    public static final String ENTER_COURSE_START_DATE = "Please enter course start date in YYYY-MM-DD format";
     private CourseService courseService = ServiceFactory.getCourseService();
 
     @Override
@@ -36,14 +36,14 @@ public class CreateNewCourse implements Command {
             } else if (course.getDescription() == null) {
                 ChatUtil.sendMessage(ENTER_COURSE_DESCRIPTION, update, source);
                 session.setNextCommand(newCourse);
-//        } else if(course.getStartDate() == null){
-//            ChatUtil.sendMessage(ENTER_COURSE_START_DATE,update,source);
-//            session.setNextCommand(newCourse);
+            } else if (course.getStartDate() == null) {
+                ChatUtil.sendMessage(ENTER_COURSE_START_DATE, update, source);
+                session.setNextCommand(newCourse);
             } else {
                 courseService.createCourse(course);
                 session.setNewCourse(null);
                 session.setNextCommand(null);
-                ChatUtil.sendMessage("Course was added successfully!:", chatId, source);
+                ChatUtil.sendMessage("Course was added successfully!", chatId, source);
             }
         }
     }

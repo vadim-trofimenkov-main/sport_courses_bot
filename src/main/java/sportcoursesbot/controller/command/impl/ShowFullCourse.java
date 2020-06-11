@@ -5,27 +5,37 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import sportcoursesbot.controller.SportCoursesBot;
 import sportcoursesbot.controller.base.SessionManager;
 import sportcoursesbot.controller.base.UserSession;
 import sportcoursesbot.controller.command.Command;
+import sportcoursesbot.controller.constant.CommandNames;
 import sportcoursesbot.controller.tool.chat.ChatUtil;
 import sportcoursesbot.controller.tool.UiEntityUtil;
 import sportcoursesbot.controller.tool.keyboard.ButtonCallback;
+import sportcoursesbot.controller.tool.keyboard.ButtonConfig;
+import sportcoursesbot.controller.tool.keyboard.KeyboardUtil;
 import sportcoursesbot.service.ServiceFactory;
 import sportcoursesbot.service.course.CourseService;
 import sportcoursesbot.shared.entity.Course;
 import sportcoursesbot.shared.tool.ExceptionHandler;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ShowFullCourse implements Command {
+    private static final String DELETE_COURSE = "Delete Course";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private CourseService service = ServiceFactory.getCourseService();
 
     @Override
     public void execute(SportCoursesBot source, Update update) throws TelegramApiException {
+        Long chatId = ChatUtil.readChatId(update);
+        UserSession session = SessionManager.getSession(chatId);
         CallbackQuery callbackQuery = update.getCallbackQuery();
         String data = callbackQuery.getData();
         try {
@@ -33,6 +43,15 @@ public class ShowFullCourse implements Command {
             Course fullCourse = service.getFullCourse(callback.getValue());
             String fullCourseString = UiEntityUtil.courseToFullString(fullCourse);
             ChatUtil.sendMessage(fullCourseString, update, source);
+            session.setNewCourse(fullCourse);
+            List<InlineKeyboardButton> buttons = Arrays.asList(
+                    new InlineKeyboardButton(DELETE_COURSE).setCallbackData(CommandNames.DELETE_COURSE)
+            );
+            List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+            keyboard.add(buttons);
+            InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
+            String message = "Course settings:";
+            ChatUtil.sendMessageWithMarkup(message, update, source, markup);
         } catch (JsonProcessingException e) {
             ExceptionHandler.printAndThrowRuntime(e);
         }

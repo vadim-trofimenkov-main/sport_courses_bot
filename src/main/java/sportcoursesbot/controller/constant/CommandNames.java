@@ -13,6 +13,6 @@ public interface CommandNames {
     String REFRESH_USER_STATUS = "/refresh_user_status";
     String CREATE_NEW_COURSE = "/create_new_course";
     String NEW_COURSE = "/new_course";
-    String DELETE_COURSE = "/create_new_course";
+    String DELETE_COURSE = "/delete_course";
     String EDIT_COURSE = "/create_new_course";
 }

@@ -8,7 +8,11 @@ import sportcoursesbot.shared.entity.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EntityDaoUtil {
@@ -75,7 +79,7 @@ public class EntityDaoUtil {
         return course;
     }
 
-     public static Coach initCoach (ResultSet resultSet) throws SQLException {
+    public static Coach initCoach(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String name = resultSet.getString("name");
         String specialization = resultSet.getString("specialization");
@@ -86,14 +90,29 @@ public class EntityDaoUtil {
         coach.setSpecialization(specialization);
         coach.setExperience(experience);
         return coach;
-     }
-     public static List<Coach> initCoaches(ResultSet resultSet) throws SQLException{
+    }
+
+    public static List<Coach> initCoaches(ResultSet resultSet) throws SQLException {
         List<Coach> coaches = new ArrayList<>();
         resultSet.beforeFirst();
-        while(resultSet.next()){
+        while (resultSet.next()) {
             Coach coach = initCoach(resultSet);
             coaches.add(coach);
         }
         return coaches;
-     }
+    }
+
+    public static Timestamp dateConverter(String date){
+        String format = "yyy-MM-dd";
+        DateFormat formatter = new SimpleDateFormat(format);
+        Date d = null;
+        try {
+            d = formatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Timestamp ts = new Timestamp(d.getTime());
+        return ts;
+    }
 }

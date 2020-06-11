@@ -9,7 +9,10 @@ import sportcoursesbot.controller.base.UserSession;
 import sportcoursesbot.controller.command.Command;
 import sportcoursesbot.controller.constant.CommandNames;
 import sportcoursesbot.controller.tool.chat.ChatUtil;
+import sportcoursesbot.dao.tool.EntityDaoUtil;
 import sportcoursesbot.shared.entity.Course;
+
+import java.sql.Timestamp;
 
 public class NewCourseCommand implements Command {
 
@@ -23,10 +26,9 @@ public class NewCourseCommand implements Command {
             course.setTitle(text);
         } else if (course.getDescription() == null) {
             course.setDescription(text);
-//        } else if (course.getStartDate() == null) {
-//
-//            course.setStartDate(text);
-
+        } else if (course.getStartDate() == null) {
+            Timestamp date = EntityDaoUtil.dateConverter(text);
+            course.setStartDate(date);
         }
         TaskManager.executeByName(CommandNames.CREATE_NEW_COURSE, source,update);
     }

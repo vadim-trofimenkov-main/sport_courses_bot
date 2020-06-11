@@ -28,6 +28,7 @@ public class TaskManager {
         COMMANDS.put(CommandNames.SHOW_ALL_COACHES, new ShowAllCoaches());
         COMMANDS.put(CommandNames.CREATE_NEW_COURSE, new CreateNewCourse());
         COMMANDS.put(CommandNames.NEW_COURSE, new NewCourseCommand());
+        COMMANDS.put(CommandNames.DELETE_COURSE, new DeleteCourseCommand());
     }
 
     public void impl(String commandName, Update update, SportCoursesBot source) throws TelegramApiException {

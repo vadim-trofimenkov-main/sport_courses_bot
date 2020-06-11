@@ -9,4 +9,5 @@ public interface CourseService {
     List<Course> getAllActualCourses();
     Course getFullCourse(int id);
     void createCourse(Course course);
+    void deleteCourse(int id);
 }

@@ -2,6 +2,7 @@ package sportcoursesbot.controller.tool.keyboard;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import sportcoursesbot.shared.entity.Course;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,4 +46,16 @@ public class KeyboardUtil {
                 .collect(Collectors.toList());
         return collect;
     }
+
+
+//    public static ButtonConfig buildConfigs(Course fullCourse, String commandName, String message) {
+//        ButtonConfig buttonConfig = new ButtonConfig();
+//
+//
+//        return buttonConfig;
+//    }
+//
+//    public static InlineKeyboardMarkup buildMarkup(ButtonConfig config) {
+//
+//    }
 }
