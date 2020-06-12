@@ -1,15 +1,19 @@
 package sportcoursesbot.service.course;
 
-
 import sportcoursesbot.dao.DaoFactory;
 import sportcoursesbot.dao.course.CourseDao;
 import sportcoursesbot.shared.entity.Course;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CourseServiceImpl implements CourseService {
     private CourseDao courseDao = DaoFactory.getCourseDao();
+
+    @Override
+    public List<Course> getAllCourses() {
+        List<Course> allCourses = courseDao.getAllCoursesShort();
+        return allCourses;
+    }
 
     @Override
     public List<Course> getAllActualCourses() {
@@ -42,6 +46,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void deleteCourse(int id) {
         courseDao.deleteCourse(id);
+    }
+
+    @Override
+    public void editCourse(Course course) {
+        courseDao.editCourse(course);
     }
 
 }

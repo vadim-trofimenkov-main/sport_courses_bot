@@ -16,6 +16,7 @@ import sportcoursesbot.shared.entity.User;
 public class CreateUserCommand implements Command {
     private UserService userService = ServiceFactory.getUserService();
 
+
     @Override
     public void execute(SportCoursesBot source, Update update) throws TelegramApiException {
         String text = update.getMessage().getText();

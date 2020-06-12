@@ -103,7 +103,7 @@ public class EntityDaoUtil {
     }
 
     public static Timestamp dateConverter(String date){
-        String format = "yyy-MM-dd";
+        String format = "yyyy-MM-dd";
         DateFormat formatter = new SimpleDateFormat(format);
         Date d = null;
         try {

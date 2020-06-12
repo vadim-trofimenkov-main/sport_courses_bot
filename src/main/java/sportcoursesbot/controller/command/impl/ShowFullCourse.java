@@ -21,6 +21,8 @@ import sportcoursesbot.controller.tool.keyboard.KeyboardUtil;
 import sportcoursesbot.service.ServiceFactory;
 import sportcoursesbot.service.course.CourseService;
 import sportcoursesbot.shared.entity.Course;
+import sportcoursesbot.shared.entity.User;
+import sportcoursesbot.shared.entity.security.Role;
 import sportcoursesbot.shared.tool.ExceptionHandler;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import java.util.List;
 
 public class ShowFullCourse implements Command {
     private static final String DELETE_COURSE = "Delete Course";
+    private static final String Edit_COURSE = "Edit Course";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private CourseService service = ServiceFactory.getCourseService();
 
@@ -36,22 +39,32 @@ public class ShowFullCourse implements Command {
     public void execute(SportCoursesBot source, Update update) throws TelegramApiException {
         Long chatId = ChatUtil.readChatId(update);
         UserSession session = SessionManager.getSession(chatId);
+        User user = session.getUser();
+        String status = user.getStatus();
+        Role role = Role.getByName(status);
         CallbackQuery callbackQuery = update.getCallbackQuery();
         String data = callbackQuery.getData();
         try {
-            ButtonCallback<Integer> callback = OBJECT_MAPPER.readValue(data, new TypeReference<ButtonCallback<Integer>>() {});
+            ButtonCallback<Integer> callback = OBJECT_MAPPER.readValue(data, new TypeReference<ButtonCallback<Integer>>() {
+            });
             Course fullCourse = service.getFullCourse(callback.getValue());
             String fullCourseString = UiEntityUtil.courseToFullString(fullCourse);
             ChatUtil.sendMessage(fullCourseString, update, source);
             session.setNewCourse(fullCourse);
-            List<InlineKeyboardButton> buttons = Arrays.asList(
-                    new InlineKeyboardButton(DELETE_COURSE).setCallbackData(CommandNames.DELETE_COURSE)
-            );
-            List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-            keyboard.add(buttons);
-            InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
-            String message = "Course settings:";
-            ChatUtil.sendMessageWithMarkup(message, update, source, markup);
+            if (Role.ADMIN.equals(role)) {
+                List<InlineKeyboardButton> button1 = Arrays.asList(
+                        new InlineKeyboardButton(DELETE_COURSE).setCallbackData(CommandNames.DELETE_COURSE)
+                );
+                List<InlineKeyboardButton> button2 = Arrays.asList(
+                        new InlineKeyboardButton(Edit_COURSE).setCallbackData(CommandNames.EDIT_COURSE)
+                );
+                List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+                keyboard.add(button1);
+                keyboard.add(button2);
+                InlineKeyboardMarkup markup = new InlineKeyboardMarkup(keyboard);
+                String message = "Course settings:";
+                ChatUtil.sendMessageWithMarkup(message, update, source, markup);
+            }
         } catch (JsonProcessingException e) {
             ExceptionHandler.printAndThrowRuntime(e);
         }

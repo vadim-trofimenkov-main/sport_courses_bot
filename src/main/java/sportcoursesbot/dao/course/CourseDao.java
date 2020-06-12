@@ -13,4 +13,6 @@ public interface CourseDao {
     void createCourse(Course course);
 
     void deleteCourse(int id);
+
+    void editCourse(Course course);
 }

@@ -14,5 +14,6 @@ public interface CommandNames {
     String CREATE_NEW_COURSE = "/create_new_course";
     String NEW_COURSE = "/new_course";
     String DELETE_COURSE = "/delete_course";
-    String EDIT_COURSE = "/create_new_course";
+    String EDIT_COURSE = "/edit_course";
+    String EDIT_COURSE_1 = "/edit_course_1";
 }

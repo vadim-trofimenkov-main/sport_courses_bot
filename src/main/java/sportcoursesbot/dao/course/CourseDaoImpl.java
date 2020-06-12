@@ -13,6 +13,7 @@ public class CourseDaoImpl implements CourseDao {
     private static final String SELECT_FULL_COURSE = "SELECT * FROM courses WHERE id = ?";
     private static final String CREATE_NEW_COURSE = "INSERT INTO courses (title, description, start_date) VALUES(?, ?, ?)";
     private static final String DELETE_COURSE = "DELETE FROM courses WHERE id = ?";
+    private static final String Edit_COURSE = "UPDATE courses SET title = ?,description = ?, start_date = ? WHERE id = ?";
 
     @Override
     public List<Course> getAllCoursesShort() {
@@ -84,6 +85,26 @@ public class CourseDaoImpl implements CourseDao {
             connection = ConnectionManager.take();
             statement = connection.prepareStatement(DELETE_COURSE);
             statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionManager.close(statement, connection);
+        }
+    }
+
+    @Override
+    public void editCourse(Course course) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = ConnectionManager.take();
+            statement = connection.prepareStatement(Edit_COURSE);
+            statement.setString(1, course.getTitle());
+            statement.setString(2, course.getDescription());
+            statement.setTimestamp(3, course.getStartDate());
+            statement.setInt(4, course.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

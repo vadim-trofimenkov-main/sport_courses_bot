@@ -3,7 +3,8 @@ package sportcoursesbot.shared.entity.security;
 import java.util.*;
 
 public enum Role {
-    ADMIN(2, Arrays.asList(Feature.BLOCK_SIMPLE_USER, Feature.EDIT_SIMPLE_USER, Feature.VIEW_USERS)),
+    ADMIN(2, Arrays.asList(Feature.BLOCK_SIMPLE_USER, Feature.EDIT_SIMPLE_USER, Feature.VIEW_USERS,
+            Feature.CREATE_NEW_COURSE,Feature.DELETE_COURSE, Feature.EDIT_COURSE)),
     SIMPLE_USER(1, new ArrayList<>()),
     SUPER_ADMIN(9999, Arrays.asList(Feature.values())),
     BLOCKED(-1, new ArrayList<>());

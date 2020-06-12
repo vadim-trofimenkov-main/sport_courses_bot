@@ -18,19 +18,20 @@ import sportcoursesbot.shared.entity.security.Feature;
 import sportcoursesbot.shared.exception.PermissionDeniedException;
 import sportcoursesbot.shared.tool.SecurityUtil;
 
-public class CreateNewCourse implements Command {
-    public static final String ENTER_COURSE_TITLE = "Please enter course title";
-    public static final String ENTER_COURSE_DESCRIPTION = "Please enter course description";
-    public static final String ENTER_COURSE_START_DATE = "Please enter course start date in YYYY-MM-DD format";
+public class EditCourseCommand implements Command {
+    public static final String UPDATE_COURSE_TITLE = "Please update course title";
+    public static final String UPDATE_COURSE_DESCRIPTION = "Please update course description";
+    public static final String UPDATE_COURSE_START_DATE = "Please update course start date in YYYY-MM-DD format";
     private CourseService courseService = ServiceFactory.getCourseService();
     private UserService userService = ServiceFactory.getUserService();
+    private Integer count = 0;
 
     @Override
     public void execute(SportCoursesBot source, Update update) throws TelegramApiException {
         Long chatId = ChatUtil.readChatId(update);
         UserSession session = SessionManager.getSession(chatId);
         User user = userService.getUser(chatId);
-        if (!SecurityUtil.hasFeature(user, Feature.CREATE_NEW_COURSE)) {
+        if (!SecurityUtil.hasFeature(user, Feature.EDIT_COURSE)) {
             throw new PermissionDeniedException();
         }
         Course course;
@@ -39,21 +40,25 @@ public class CreateNewCourse implements Command {
             session.setNewCourse(course);
         } else {
             course = session.getNewCourse();
-            Command newCourse = TaskManager.getCommand(CommandNames.NEW_COURSE);
-            if (course.getTitle() == null) {
-                ChatUtil.sendMessage(ENTER_COURSE_TITLE, update, source);
-                session.setNextCommand(newCourse);
-            } else if (course.getDescription() == null) {
-                ChatUtil.sendMessage(ENTER_COURSE_DESCRIPTION, update, source);
-                session.setNextCommand(newCourse);
-            } else if (course.getStartDate() == null) {
-                ChatUtil.sendMessage(ENTER_COURSE_START_DATE, update, source);
-                session.setNextCommand(newCourse);
+            Command nextCommand = TaskManager.getCommand(CommandNames.EDIT_COURSE_1);
+            if (count == 0) {
+                ChatUtil.sendMessage(UPDATE_COURSE_TITLE, update, source);
+                session.setNextCommand(nextCommand);
+                count = 1;
+            } else if (count == 1) {
+                ChatUtil.sendMessage(UPDATE_COURSE_DESCRIPTION, update, source);
+                session.setNextCommand(nextCommand);
+                count = 2;
+            } else if (count == 2) {
+                ChatUtil.sendMessage(UPDATE_COURSE_START_DATE, update, source);
+                session.setNextCommand(nextCommand);
+                count = 3;
             } else {
-                courseService.createCourse(course);
+                courseService.editCourse(course);
                 session.setNewCourse(null);
                 session.setNextCommand(null);
-                ChatUtil.sendMessage("Course was added successfully!", chatId, source);
+                count = 0;
+                ChatUtil.sendMessage("Course was updated successfully!", chatId, source);
             }
         }
     }
